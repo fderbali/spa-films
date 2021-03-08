@@ -111,35 +111,71 @@
     <!-- Modal Structure -->
     <div id="modal1" class="modal">
         <div class="modal-content">
-            <h4>Ajouter / Éditer Film</h4>
+            <h4>Ajouter Film</h4>
         </div>
         <div class="row">
-            <form class="col s12" id="form_add_film">
+            <form class="col s12" id="form_add_film" enctype='multipart/form-data'>
                 <input type="hidden" value="" id="id_edit_film" />
                 <div class="row">
                     <div class="input-field col s6">
-                        <input placeholder="Titre" id="titre_film" type="text" class="validate">
-                        <label for="titre_film">Titre du film</label>
+                        <input placeholder="Titre" id="nom" name="nom" type="text" class="validate">
+                        <label for="nom">Titre du film</label>
                     </div>
                     <div class="input-field col s6">
-                        <input placeholder="Durée" id="duree_film" type="number" class="validate">
-                        <label for="duree_film">Durée du film</label>
+                        <input placeholder="Réalisateur" id="realisateur" name="realisateur" type="text" class="validate">
+                        <label for="realisateur">Réalisateur</label>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s6">
-                        <input placeholder="Année" id="annee_film" type="number" class="validate">
-                        <label for="annee_film">Année du film</label>
+                        <input placeholder="Durée" id="duree" name="duree" type="text" class="validate timepicker">
+                        <label for="duree">Durée</label>
                     </div>
                     <div class="input-field col s6">
-                        <textarea id="description_film" class="materialize-textarea"></textarea>
-                        <label for="description_film">Description du film</label>
+                        <select name="langue" id="langue">
+                            <option value="">Sélectionnez...</option>
+                            <option value="fr">Français</option>
+                            <option value="en">Anglais</option>
+                            <option value="es">Espagnol</option>
+                            <option value="it">Italien</option>
+                            <option value="de">Allemand</option>
+                        </select>
+                        <label for="langue">Langue</label>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="input-field col s12">
-                        <input placeholder="Pochette" id="pochette_film" type="text" class="validate">
-                        <label for="pochette_film">Pochette du film</label>
+                    <div class="input-field col s6">
+                        <input placeholder="date" id="date" type="text" class="validate datepicker">
+                        <label for="date">Date de sortie</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input placeholder="URL bande annonce" id="url_bande_annonce" type="text" class="validate">
+                        <label for="url_bande_annonce">Bande annonce</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input placeholder="prix" id="prix" type="text" class="validate">
+                        <label for="prix">Prix</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input placeholder="definition" id="definition" type="text" class="validate">
+                        <label for="definition">Définition</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <!--div class="input-field col s12">
+                        <input placeholder="Pochette" id="pochette" type="text" class="validate">
+                        <label for="pochette">Pochette</label>
+                    </!--div-->
+                    <div class="file-field input-field col s12">
+                        <div class="btn">
+                            <span>Pochette</span>
+                            <input type="file" name="pochette">
+                        </div>
+                        <div class="file-path-wrapper">
+                            <input class="file-path validate" type="text">
+                        </div>
                     </div>
                 </div>
             </form>

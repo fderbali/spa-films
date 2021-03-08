@@ -5,6 +5,9 @@ let listeCategories = [];
 	$(() => {
 		$('.sidenav').sidenav();
 		$(".dropdown-trigger").dropdown();
+		$('select').formSelect();
+		$('.datepicker').datepicker({ "format": "yyyy-mm-dd", "autoClose": true });
+		$('.timepicker').timepicker({ "autoClose": true, "twelveHour": false, "showClearBtn": true });
 		$('.modal').modal({
 			dismissible: true,
 			onCloseStart: function () { // Callback for Modal close
@@ -58,7 +61,7 @@ let listeCategories = [];
 				displayList(listeFilms);
 			},
 			"fail": () => {
-
+				displayError("Erreur lors du chargement de la page");
 			}
 		});
 	});
