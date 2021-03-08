@@ -58,23 +58,27 @@ let listeCategories = [];
 				displayList(listeFilms);
 			},
 			"fail": () => {
-				$("#contenu_page").html("<div class='card-panel red lighten-2'>Erreur lors du chargement de la page</div>");
+
 			}
 		});
 	});
 })(jQuery);
 
 let displayList = (films) => {
-	contenu = "<div class='row'>";
-	for (unFilm of films) {
-		contenu += remplirCard(unFilm);
+	if (films.length > 0) {
+		contenu = "<div class='row'>";
+		for (unFilm of films) {
+			contenu += remplirCard(unFilm);
+		}
+		contenu += "</div>";
+		$("#contenu_page").html(contenu);
+		paginpers();
+		showPage(1);
+		displayCategories();
+		assign_events();
+	} else {
+		displayError("Aucun film à afficher !");
 	}
-	contenu += "</div>";
-	$("#contenu_page").html(contenu);
-	paginpers();
-	showPage(1);
-	displayCategories();
-	assign_events();
 }
 
 let displayCategories = () => {
@@ -88,9 +92,9 @@ let displayCategories = () => {
 
 let remplirCateg = (uneCateg) => {
 	return `
-			<p class="my-0">
+			<p class="my-0" >
 				<label>
-					<input type="checkbox" />
+					<input type="checkbox" class="categ_choice" value="${uneCateg}"/>
 					<span>${uneCateg}</span>
 				</label>
 			</p>
@@ -131,6 +135,27 @@ let assign_events = () => {
 	$('#menu_catgories').click(function () {
 		$('.sidenav').sidenav('open');
 	});
+	$('#refine_categories').click(() => {
+		var favorite_categ = [];
+		$.each($(".categ_choice:checked"), function () {
+			favorite_categ.push($(this).val());
+		});
+		$.ajax({
+			"type": "POST",
+			"data": { "action": "filter", "favorite_categ": favorite_categ },
+			"url": "http://spa-serveur2.test/serveur/gestionFilms.php",
+			"async": true,
+			"dataType": "json",
+			"success": (reponse) => {
+				listeFilms = reponse;
+				displayList(listeFilms);
+			},
+			"fail": () => {
+				displayError("Erreur lors du chargement de la page");
+			}
+		});
+		$('.sidenav').sidenav('close');
+	})
 }
 
 let remplirCard = (unFilm) => {
@@ -164,4 +189,18 @@ let search_film = () => {
 	let films_found = listeFilms.filter(x => x.nom.search(search_text) > -1);
 	displayList(films_found);
 	return false;
+}
+
+let displayError = (message) => {
+	$("#main_part").html(`
+		<div div class= 'row' >
+			<div class='col s6 push-s3'>
+				<div class='card-panel red lighten-1 center-align'><h6 class='white-text'>${message}</h6></div>
+			</div>
+		</div>
+		<div div class= 'row center-align' >
+			<div class='col s6 push-s3'>
+				<a class="waves-effect waves-light btn red" href='index.php'><i class="material-icons left">arrow_back</i>Retour</a>
+			</div>
+		</div>`);
 }

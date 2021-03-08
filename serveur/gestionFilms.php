@@ -111,6 +111,23 @@ function modifier()
         unset($unModele);
     }
 }
+
+function filter()
+{
+    $film = new film([]);
+    try {
+        $liste_films = $film->filterFilmListByCategories($_POST["favorite_categ"]);
+        $films_to_return = [];
+        foreach ($liste_films as $film) {
+            $film->url_bande_annonce = str_replace("watch?v=", "embed/", $film->url_bande_annonce);
+            $films_to_return[] = $film;
+        }
+        print  json_encode($films_to_return);
+    } catch (Exception $e) {
+    } finally {
+        unset($film);
+    }
+}
 //******************************************************
 //Contrôleur
 $action = $_POST['action'];
@@ -126,6 +143,9 @@ switch ($action) {
         break;
     case "fiche":
         fiche();
+        break;
+    case "filter":
+        filter();
         break;
     case "modifier":
         modifier();

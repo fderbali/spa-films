@@ -103,6 +103,44 @@ class film extends dfilms
         return $results;
     }
 
+    public function filterFilmListByCategories($favourite_categs)
+    {
+        //$favourite_categs = implode(",", $favourite_categs);
+        $requete = "SELECT  
+                        films.id, 
+                        films.nom, 
+                        films.realisateur, 
+                        films.duree, 
+                        films.langue, 
+                        films.date, 
+                        films.pochette, 
+                        films.en_vedette, 
+                        films.pochette_grand_format, 
+                        films.url_bande_annonce, 
+                        films.prix, 
+                        films.score,
+                        films.definition,
+                        group_concat(categories.nom) categories
+                FROM     films 
+                JOIN     film_categorie 
+                ON       films.id = film_categorie.films_id 
+                JOIN     categories 
+                ON       film_categorie.categorie_id = categories.id 
+                GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13";
+        $having = [];
+        foreach ($favourite_categs  as $favourite_categ) {
+            $having[] = " categories like '%$favourite_categ%' ";
+        }
+        $requete .= " HAVING " . implode(" AND ", $having);
+        $options = [
+            "requete" => $requete,
+            "types" => "",
+            "vars" => []
+        ];
+        $results = $this->sqlDoQuery($options);
+        return $results;
+    }
+
     public function save()
     {
         $requete = "INSERT INTO films 

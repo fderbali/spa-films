@@ -32,7 +32,7 @@
         </ul>
         <nav>
             <div class="nav-wrapper grey darken-4">
-                <a href="index.html" class="brand-logo hide-on-small-only" style="text-decoration:none"><img src="images/logo.png" class="logo" alt="Dfilm" /></a>
+                <a href="index.php" class="brand-logo hide-on-small-only" style="text-decoration:none"><img src="images/logo.png" class="logo" alt="Dfilm" /></a>
                 <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                 <form class="right" onsubmit="return search_film()">
                     <div class="input-field">
@@ -64,7 +64,7 @@
                 </div>
             </li>
         </ul>
-        <div class="paginate">
+        <div class="paginate" id="main_part">
             <div class="section items container" id="contenu_page">
                 <div class="valign-wrapper loading">
                     <h2 class="center-align">Chargement</h2>
@@ -151,9 +151,9 @@
 
     <!-- Modal Bande annonce -->
     <div id="bande_annonce" class="modal">
-        <div class="modal-content">
+        <!--div class="modal-content">
             <h4>Bande Annonce</h4>
-        </div>
+        </!--div-->
         <div class="row">
             <div class="col s12">
                 <iframe width="900" height="506" src="" id="iframe_bande_annaonce" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
