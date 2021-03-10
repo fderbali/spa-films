@@ -93,15 +93,15 @@ var array_unique = (arrArg) => {
 
 let assign_events = () => {
 	$('.tri_titre').click(function () {
-		listeFilms.sort((a, b) => (b.title < a.title) ? 1 : -1);
+		listeFilms.sort((a, b) => (b.nom < a.nom) ? 1 : -1);
 		displayList(listeFilms);
 	});
 	$('.tri_duree').click(function () {
-		listeFilms.sort((a, b) => parseInt(a.runtime) - parseInt(b.runtime));
+		listeFilms.sort((a, b) => parseInt(a.duree) - parseInt(b.duree));
 		displayList(listeFilms);
 	});
 	$('.tri_annee').click(function () {
-		listeFilms.sort((a, b) => parseInt(a.year) - parseInt(b.year));
+		listeFilms.sort((a, b) => parseInt(a.date) - parseInt(b.date));
 		displayList(listeFilms);
 	})
 	$('#search_text').blur(function () {
@@ -154,6 +154,7 @@ let remplirCard = (unFilm) => {
 						<span class="card-title">${unFilm.nom}</span>
 					</div>
 					<div class="card-content">
+						<h6 class='center-align red-text darken-4'><b>${unFilm.nom}</b></h6>
 						<p>Réalisateur : ${unFilm.realisateur}</p>
 						<p>Durée : ${unFilm.duree}</p>
 						<p>Date : ${unFilm.date}</p>
@@ -194,7 +195,7 @@ let form_submitted = () => {
 		url: 'http://spa-serveur2.test/serveur/gestionFilms.php',
 		type: 'post',
 		success: function () {
-			M.toast({ html: "Film enregistré avec succès", displayLength: 10000 });
+			M.toast({ html: "Film enregistré avec succès", displayLength: 10000, classes: 'red' });
 			$('.modal').modal('close');
 			loadFilms();
 		}
