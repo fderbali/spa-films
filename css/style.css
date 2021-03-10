@@ -66,3 +66,7 @@ h2 {
 .brand-logo {
   margin-left: 10px;
 }
+
+.error_select {
+  border-color: red;
+}

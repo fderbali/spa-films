@@ -88,9 +88,9 @@ class film extends dfilms
                         films.definition,
                         group_concat(categories.nom) categories
                 FROM     films 
-                JOIN     film_categorie 
+                LEFT JOIN     film_categorie 
                 ON       films.id = film_categorie.films_id 
-                JOIN     categories 
+                LEFT JOIN     categories 
                 ON       film_categorie.categorie_id = categories.id 
                 GROUP BY 1,2,3,4,5,6,7,8,9,10,11,12,13";
             $options = [

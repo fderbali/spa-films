@@ -3,21 +3,64 @@ require_once("../includes/films.class.php");
 $tabRes = array();
 function enregistrer()
 {
-    global $tabRes;
-    $titre = $_POST['titre'];
-    $duree = $_POST['duree'];
-    $res = $_POST['res'];
+    $nom = $_POST["nom"];
+    $realisateur = $_POST["realisateur"];
+    $duree = $_POST["duree"];
+    $langue = $_POST["langue"];
+    $date = $_POST["date_sortie"];
+    $prix = $_POST["prix"];
+    $definition = $_POST["definition"];
+    $nomPochette = sha1($nom . time());
+    $dossierPochettes = "../images/pochettes/";
+    $url_bande_annonce = $_POST["url_bande_annonce"];
+    $erreur = $message = "";
     try {
-        $unModele = new filmsModele();
-        $pochete = $unModele->verserFichier("pochettes", "pochette", "avatar.jpg", $titre);
-        $requete = "INSERT INTO films VALUES(0,?,?,?,?)";
-        $unModele = new filmsModele($requete, array($titre, $duree, $res, $pochete));
-        $stmt = $unModele->executer();
-        $tabRes['action'] = "enregistrer";
-        $tabRes['msg'] = "Film bien enregistre";
+        // Enregregistrement des pochettes :
+        if ($_FILES['pochette']['tmp_name'] !== "") {
+            //Upload de la photo
+            $tmp = $_FILES['pochette']['tmp_name'];
+            $fichier = $_FILES['pochette']['name'];
+            $extension = strrchr($fichier, '.');
+            @move_uploaded_file($tmp, $dossierPochettes . $nomPochette . $extension);
+            // Enlever le fichier temporaire chargé
+            @unlink($tmp); //effacer le fichier temporaire
+            $pochette = $nomPochette . $extension;
+        }
+        $film = new film([
+            "id" => (isset($id) ? $id : 0),
+            "nom" => $nom,
+            "realisateur" => $realisateur,
+            "duree" => $duree,
+            "langue" => $langue,
+            "date" => $date,
+            "pochette" => $pochette,
+            "url_bande_annonce" => $url_bande_annonce,
+            "prix" => $prix,
+            "definition" => $definition,
+            "en_vedette" => false,
+            "score" => 0,
+        ]);
+        $inserted_id = $film->save();
+        if ($inserted_id) {
+            $response = [
+                "message" => "Film enregistré avec succès !",
+                "succes" => true
+            ];
+        } else {
+            $erreur = "Le film n'a pas pu être enregistré !";
+            $response = [
+                "message" => $erreur = $e->getMessage(),
+                "succes" => false
+            ];
+        }
     } catch (Exception $e) {
+        $response = [
+            "message" => $erreur = $e->getMessage(),
+            "succes" => false
+        ];
     } finally {
-        unset($unModele);
+        print json_encode($response);
+        unset($film);
     }
 }
 

@@ -52,7 +52,7 @@
         <ul class="sidenav" id="mobile-demo">
             <li class="hide-on-large-only"><a class="dropdown-trigger" href="#!" data-target="dropdown1">Trier par<i class="material-icons right">arrow_drop_down</i></a></li>
             <li class="hide-on-large-only">
-                <a class="waves-effect waves-light modal-trigger" href="#modal1"><i class="material-icons">add</i>button</a>
+                <a class="waves-effect waves-light modal-trigger" href="#modal1"><i class="material-icons">add</i>Ajouter film</a>
             </li>
             <li>
                 <div class="container">
@@ -114,25 +114,28 @@
             <h4>Ajouter Film</h4>
         </div>
         <div class="row">
-            <form class="col s12" id="form_add_film" enctype='multipart/form-data'>
-                <input type="hidden" value="" id="id_edit_film" />
+            <form class="col s12" id="form_add_film" onsubmit="return form_submitted()">
+                <input type="hidden" name="action" value="enregistrer">
                 <div class="row">
                     <div class="input-field col s6">
-                        <input placeholder="Titre" id="nom" name="nom" type="text" class="validate">
+                        <input placeholder="Titre" id="nom" name="nom" type="text" required class="validate">
                         <label for="nom">Titre du film</label>
+                        <span class="helper-text" data-error="Ce champs est requis" data-success="✔"></span>
                     </div>
                     <div class="input-field col s6">
-                        <input placeholder="Réalisateur" id="realisateur" name="realisateur" type="text" class="validate">
+                        <input placeholder="Réalisateur" id="realisateur" name="realisateur" required type="text" class="validate">
                         <label for="realisateur">Réalisateur</label>
+                        <span class="helper-text" data-error="Ce champs est requis" data-success="✔"></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s6">
-                        <input placeholder="Durée" id="duree" name="duree" type="text" class="validate timepicker">
+                        <input placeholder="Durée" id="duree" name="duree" type="text" required class="validate timepicker">
                         <label for="duree">Durée</label>
+                        <span class="helper-text" data-error="Ce champs est requis" data-success="✔"></span>
                     </div>
                     <div class="input-field col s6">
-                        <select name="langue" id="langue">
+                        <select name="langue" id="langue" required class="browser-default validate">
                             <option value="">Sélectionnez...</option>
                             <option value="fr">Français</option>
                             <option value="en">Anglais</option>
@@ -140,48 +143,56 @@
                             <option value="it">Italien</option>
                             <option value="de">Allemand</option>
                         </select>
-                        <label for="langue">Langue</label>
                     </div>
                 </div>
-                <div class="row">
+                <div class=" row">
                     <div class="input-field col s6">
-                        <input placeholder="date" id="date" type="text" class="validate datepicker">
+                        <input placeholder="date" id="date" name="date_sortie" type="text" required class="validate datepicker">
                         <label for="date">Date de sortie</label>
+                        <span class="helper-text" data-error="Ce champs est requis" data-success="✔"></span>
                     </div>
                     <div class="input-field col s6">
-                        <input placeholder="URL bande annonce" id="url_bande_annonce" type="text" class="validate">
+                        <input placeholder="URL bande annonce" name="url_bande_annonce" id="url_bande_annonce" required type="text" class="validate">
                         <label for="url_bande_annonce">Bande annonce</label>
+                        <span class="helper-text" data-error="Ce champs est requis" data-success="✔"></span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s6">
-                        <input placeholder="prix" id="prix" type="text" class="validate">
+                        <input placeholder="prix" name="prix" id="prix" type="text" required class="validate">
                         <label for="prix">Prix</label>
+                        <span class="helper-text" data-error="Ce champs est requis" data-success="✔"></span>
                     </div>
                     <div class="input-field col s6">
-                        <input placeholder="definition" id="definition" type="text" class="validate">
+                        <input placeholder="definition" id="definition" name="definition" required type="text" class="validate">
                         <label for="definition">Définition</label>
+                        <span class="helper-text" data-error="Ce champs est requis" data-success="✔"></span>
                     </div>
                 </div>
                 <div class="row">
-                    <!--div class="input-field col s12">
-                        <input placeholder="Pochette" id="pochette" type="text" class="validate">
-                        <label for="pochette">Pochette</label>
-                    </!--div-->
                     <div class="file-field input-field col s12">
                         <div class="btn">
                             <span>Pochette</span>
-                            <input type="file" name="pochette">
+                            <input type="file" name="pochette" required>
+                            <span class="helper-text" data-error="Ce champs est requis" data-success="✔"></span>
                         </div>
                         <div class="file-path-wrapper">
-                            <input class="file-path validate" type="text">
+                            <input class="file-path validate" type="text" required>
+                            <span class="helper-text" data-error="Ce champs est requis" data-success="✔"></span>
                         </div>
                     </div>
                 </div>
+
+                <div class="modal-footer">
+                    <button class="btn modal-close waves-effect waves-light red lighten-2">Annuler
+                        <i class="material-icons right">cancel</i>
+                    </button>
+                    <button type="submit" class="btn waves-effect waves-light red" id="add_film">Enregistrer
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+
             </form>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat" id="save_film">Enregistrer</a>
         </div>
     </div>
 
@@ -196,12 +207,13 @@
             </div>
         </div>
         <div class="modal-footer">
-            <a href="#!" class="modal-close waves-effect waves-green btn-flat" id="save_film">Fermer</a>
+            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Fermer</a>
         </div>
     </div>
 
     <!--JavaScript at end of body for optimized loading-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="js/paginpers.js"></script>
     <script src="js/init.js"></script>

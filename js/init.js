@@ -5,34 +5,11 @@ let listeCategories = [];
 	$(() => {
 		$('.sidenav').sidenav();
 		$(".dropdown-trigger").dropdown();
-		$('select').formSelect();
 		$('.datepicker').datepicker({ "format": "yyyy-mm-dd", "autoClose": true });
 		$('.timepicker').timepicker({ "autoClose": true, "twelveHour": false, "showClearBtn": true });
 		$('.modal').modal({
-			dismissible: true,
+			dismissible: false,
 			onCloseStart: function () { // Callback for Modal close
-				if ($("#titre_film").val() && $("#annee_film").val() && $("#duree_film").val() && $("#pochette_film").val()) {
-					if ($("#id_edit_film").val() == "") {
-						let film = {
-							"id": listeFilms.length + 2,
-							"title": $("#titre_film").val(),
-							"year": $("#annee_film").val(),
-							"runtime": $("#duree_film").val(),
-							"plot": $("#description_film").val(),
-							"posterUrl": $("#pochette_film").val()
-						}
-						listeFilms.unshift(film);
-					} else {
-						let id = $("#id_edit_film").val();
-						console.log(id);
-						console.log(listeFilms.find(x => x.id == id));
-						listeFilms.find(x => x.id == id).title = $("#titre_film").val();
-						listeFilms.find(x => x.id == id).year = $("#annee_film").val();
-						listeFilms.find(x => x.id == id).runtime = $("#duree_film").val();
-						listeFilms.find(x => x.id == id).plot = $("#description_film").val();
-						listeFilms.find(x => x.id == id).posterUrl = $("#pochette_film").val();
-					}
-				}
 				displayList(listeFilms);
 				$("#form_add_film").trigger("reset")
 			},
@@ -49,23 +26,27 @@ let listeCategories = [];
 				$("#iframe_bande_annaonce").attr("src", "");
 			}
 		});
-		// Chargement du fichier JSON
-		$.ajax({
-			"type": "POST",
-			"data": { "action": "lister" },
-			"url": "http://spa-serveur2.test/serveur/gestionFilms.php",
-			"async": true,
-			"dataType": "json",
-			"success": (reponse) => {
-				listeFilms = reponse;
-				displayList(listeFilms);
-			},
-			"fail": () => {
-				displayError("Erreur lors du chargement de la page");
-			}
-		});
+		// Chargement des films
+		loadFilms();
 	});
 })(jQuery);
+
+let loadFilms = () => {
+	$.ajax({
+		"type": "POST",
+		"data": { "action": "lister" },
+		"url": "http://spa-serveur2.test/serveur/gestionFilms.php",
+		"async": true,
+		"dataType": "json",
+		"success": (reponse) => {
+			listeFilms = reponse;
+			displayList(listeFilms);
+		},
+		"fail": () => {
+			displayError("Erreur lors du chargement de la page");
+		}
+	});
+}
 
 let displayList = (films) => {
 	if (films.length > 0) {
@@ -111,15 +92,6 @@ var array_unique = (arrArg) => {
 }
 
 let assign_events = () => {
-	$('.delete_film').click(function () {
-		id = $(this).data("id");
-		listeFilms.splice(listeFilms.indexOf(listeFilms.find(x => x.id === id)), 1);
-		displayList(listeFilms);
-	});
-	$('.edit_film').click(function () {
-		id_edit = $(this).data("id");
-		//delete_film(id);
-	});
 	$('.tri_titre').click(function () {
 		listeFilms.sort((a, b) => (b.title < a.title) ? 1 : -1);
 		displayList(listeFilms);
@@ -158,11 +130,20 @@ let assign_events = () => {
 			}
 		});
 		$('.sidenav').sidenav('close');
-	})
+	});
+	$('select').blur(function () {
+		if (!$(this).val()) {
+			$(this).addClass('error_select');
+		} else {
+			$(this).removeClass('error_select');
+		}
+	});
 }
 
 let remplirCard = (unFilm) => {
-	categs_splitted = unFilm.categories.split(",");
+	if (unFilm.categories) {
+		categs_splitted = unFilm.categories.split(",");
+	}
 	listeCategories = listeCategories.concat(categs_splitted);
 	categs = categs_splitted.join(", ");
 	return `
@@ -206,4 +187,18 @@ let displayError = (message) => {
 				<a class="waves-effect waves-light btn red" href='index.php'><i class="material-icons left">arrow_back</i>Retour</a>
 			</div>
 		</div>`);
+}
+
+let form_submitted = () => {
+	let options = {
+		url: 'http://spa-serveur2.test/serveur/gestionFilms.php',
+		type: 'post',
+		success: function () {
+			M.toast({ html: "Film enregistré avec succès", displayLength: 10000 });
+			$('.modal').modal('close');
+			loadFilms();
+		}
+	};
+	$("#form_add_film").ajaxSubmit(options);
+	return false;
 }
