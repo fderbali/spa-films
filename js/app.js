@@ -28,6 +28,7 @@ let listeCategories = [];
 		});
 		// Chargement des films
 		loadFilms();
+		loadCategories();
 	});
 })(jQuery);
 
@@ -41,6 +42,27 @@ let loadFilms = () => {
 		"success": (reponse) => {
 			listeFilms = reponse;
 			displayList(listeFilms);
+		},
+		"fail": () => {
+			displayError("Erreur lors du chargement de la page");
+		}
+	});
+}
+
+let loadCategories = () => {
+	$.ajax({
+		"type": "POST",
+		"data": { "action": "listerCtegs" },
+		"url": "http://spa-serveur2.test/serveur/gestionFilms.php",
+		"async": true,
+		"dataType": "json",
+		"success": (reponse) => {
+			content = "";
+			for (categ of reponse) {
+				content += remplirCategForAddFilmForm(categ);
+			}
+			$("#categories_form").html(content);
+			//console.log(content);
 		},
 		"fail": () => {
 			displayError("Erreur lors du chargement de la page");
@@ -72,6 +94,19 @@ let displayCategories = () => {
 		contenu += remplirCateg(uneCateg);
 	}
 	$("#template_categories").html(contenu);
+}
+
+let remplirCategForAddFilmForm = (uneCateg) => {
+	return `
+		<div class="col s4">
+			<p class="my-0" >
+				<label>
+					<input type="checkbox" class="categ_choice" name="categories[]" value="${uneCateg.id}"/>
+					<span>${uneCateg.nom}</span>
+				</label>
+			</p>
+		</div>
+    	`;
 }
 
 let remplirCateg = (uneCateg) => {
@@ -151,7 +186,7 @@ let remplirCard = (unFilm) => {
 				<div class="card hoverable">
 					<div class="card-image">
 						<img src="images/pochettes/${unFilm.pochette}" class="width_180" />
-						<span class="card-title">${unFilm.nom}</span>
+						<!--span class="card-title red white-text">${unFilm.nom}</span-->
 					</div>
 					<div class="card-content">
 						<h6 class='center-align red-text darken-4'><b>${unFilm.nom}</b></h6>

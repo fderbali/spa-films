@@ -1,5 +1,6 @@
 <?php
 require_once("../includes/films.class.php");
+require_once("../includes/categories.class.php");
 $tabRes = array();
 function enregistrer()
 {
@@ -41,6 +42,9 @@ function enregistrer()
             "score" => 0,
         ]);
         $inserted_id = $film->save();
+        $film->id = $inserted_id;
+        $film->delete_categories();
+        $film->save_categories($_POST['categories']);
         if ($inserted_id) {
             $response = [
                 "message" => "Film enregistré avec succès !",
@@ -75,6 +79,22 @@ function lister()
             $films_to_return[] = $film;
         }
         print  json_encode($films_to_return);
+    } catch (Exception $e) {
+    } finally {
+        unset($film);
+    }
+}
+
+function listerCategs()
+{
+    $categorie = new categorie([]);
+    try {
+        $liste_categs = $categorie->getCategorieList();
+        $categs_to_return = [];
+        foreach ($liste_categs as $categ) {
+            $categs_to_return[] = $categ;
+        }
+        print  json_encode($categs_to_return);
     } catch (Exception $e) {
     } finally {
         unset($film);
@@ -192,5 +212,8 @@ switch ($action) {
         break;
     case "modifier":
         modifier();
+        break;
+    case "listerCtegs":
+        listerCategs();
         break;
 }

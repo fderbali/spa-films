@@ -169,6 +169,8 @@
                         <span class="helper-text" data-error="Ce champs est requis" data-success="✔"></span>
                     </div>
                 </div>
+                <div class="row" id="categories_form">
+                </div>
                 <div class="row">
                     <div class="file-field input-field col s12">
                         <div class="btn">
@@ -184,7 +186,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button class="btn modal-close waves-effect waves-light red lighten-2">Annuler
+                    <button class="btn modal-close waves-effect waves-light red lighten-2">Fermer
                         <i class="material-icons right">cancel</i>
                     </button>
                     <button type="submit" class="btn waves-effect waves-light red" id="add_film">Enregistrer
